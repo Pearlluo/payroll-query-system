@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payroll Query Form</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #dbe2ea;
+    --border-strong: #c7d2e0;
+    --primary: #1d4ed8;
+    --primary-hover: #1e40af;
+    --primary-soft: rgba(29, 78, 216, 0.10);
+    --danger: #dc2626;
+    --danger-soft: #fef2f2;
+    --chip-bg: #eff6ff;
+    --chip-text: #1d4ed8;
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background:
+        radial-gradient(circle at top left, #eef4ff 0%, transparent 28%),
+        radial-gradient(circle at top right, #f8fbff 0%, transparent 24%),
+        var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 20px;
+    color: var(--text);
+}
+
+.container {
+    width: 100%;
+    max-width: 760px;
+}
+
+.card {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(219, 226, 234, 0.7);
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #eef4ff;
+    color: var(--primary);
+    border: 1px solid #dbeafe;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    margin-bottom: 16px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    color: var(--text);
+}
+
+.subtitle {
+    margin: 8px 0 28px 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.date-row {
+    display: flex;
+    gap: 16px;
+}
+
+.date-row .form-group {
+    flex: 1;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 650;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.required {
+    color: #ef4444;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 14px 15px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: #fcfdff;
+    color: var(--text);
+    font-size: 15px;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-soft);
+    background: #ffffff;
+}
+
+textarea {
+    min-height: 128px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.upload-box {
+    border: 1.5px dashed var(--border-strong);
+    background: linear-gradient(180deg, #fbfdff 0%, #f8fbff 100%);
+    border-radius: 18px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.upload-box:hover {
+    border-color: var(--primary);
+    background: #f8fbff;
+    transform: translateY(-1px);
+}
+
+.upload-icon {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 12px auto;
+    border-radius: 16px;
+    background: #eef4ff;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.upload-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.upload-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.help-text {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+.file-list {
+    margin-top: 14px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--chip-bg);
+    color: var(--chip-text);
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.file-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.file-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 430px;
+}
+
+.file-size {
+    color: #475569;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.file-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.remove-file-btn {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.remove-file-btn:hover {
+    background: #bfdbfe;
+}
+
+.file-error {
+    display: none;
+    margin-top: 12px;
+    background: var(--danger-soft);
+    border: 1px solid #fecaca;
+    color: var(--danger);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.submit-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: none;
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    box-shadow: 0 12px 24px rgba(29, 78, 216, 0.22);
+}
+
+.submit-btn:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 100%);
+    box-shadow: 0 16px 26px rgba(29, 78, 216, 0.24);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+@media (max-width: 720px) {
+    .card {
+        padding: 24px 18px;
+        border-radius: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .date-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .file-name {
+        max-width: 180px;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header-badge">Payroll Support</div>
+        <h1>Payroll Query Form</h1>
+        <p class="subtitle">Submit your payroll issue below. Please provide as much detail as possible so the team can review it quickly.</p>
+
+        <form id="payrollForm" action="/submit" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Employee Full Name <span class="required">*</span></label>
+                <input type="text" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number <span class="required">*</span></label>
+                <input type="tel" name="phone" required placeholder="e.g. 04xx xxx xxx">
+            </div>
+
+            <div class="form-group">
+                <label>Email Address <span class="required">*</span></label>
+                <input type="email" name="email" required placeholder="example@company.com">
+            </div>
+
+            <div class="form-group">
+                <label>Employer <span class="required">*</span></label>
+                <input type="text" name="employer" required>
+            </div>
+
+            <div class="form-group">
+                <label>Site / Department (Optional)</label>
+                <input type="text" name="site">
+            </div>
+
+            <div class="date-row">
+                <div class="form-group">
+                    <label>Pay Period Start <span class="required">*</span></label>
+                    <input type="date" name="pay_period_start" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Pay Period End <span class="required">*</span></label>
+                    <input type="date" name="pay_period_end" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Query Type <span class="required">*</span></label>
+                <select name="query_type" required>
+                    <option value="">Please select</option>
+                    <option>Missing hours / incorrect hours</option>
+                    <option>Pay rate incorrect</option>
+                    <option>Overtime / penalty rates</option>
+                    <option>Allowances</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Additional Information (Optional)</label>
+                <textarea name="description" placeholder="Describe your issue..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Attachments (Optional)</label>
+
+                <div class="upload-box" onclick="document.getElementById('attachments').click()">
+                    <div class="upload-icon">↑</div>
+                    <div class="upload-title">Click to upload supporting files</div>
+                    <div class="upload-subtitle">
+                        Up to 3 files. Total combined size must not exceed 20MB.
+                    </div>
+                    <input
+                        id="attachments"
+                        type="file"
+                        name="attachments"
+                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xlsx,.xls"
+                        multiple
+                        hidden
+                    >
+                </div>
+
+                <div class="summary-row">
+                    <div id="file-count">0 files selected</div>
+                    <div id="file-total-size">Total size: 0 KB / 20 MB</div>
+                </div>
+
+                <div id="file-list" class="file-list"></div>
+                <div id="file-error" class="file-error"></div>
+
+                <div class="help-text">
+                    Accepted file types: PDF, JPG, PNG, DOC, DOCX, XLS, XLSX
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Query</button>
+        </form>
+    </div>
+</div>
+
+<script>
+const attachmentInput = document.getElementById("attachments");
+const fileList = document.getElementById("file-list");
+const fileError = document.getElementById("file-error");
+const fileCount = document.getElementById("file-count");
+const fileTotalSize = document.getElementById("file-total-size");
+const payrollForm = document.getElementById("payrollForm");
+
+const MAX_FILES = 3;
+const MAX_TOTAL_SIZE = 20 * 1024 * 1024; // 20MB
+
+let selectedFiles = [];
+
+function formatBytes(bytes) {
+    if (bytes === 0) return "0 KB";
+
+    const kb = bytes / 1024;
+    const mb = kb / 1024;
+
+    if (mb >= 1) {
+        return mb.toFixed(2) + " MB";
+    } else {
+        return Math.round(kb) + " KB";
+    }
+}
+
+function showError(message) {
+    fileError.textContent = message;
+    fileError.style.display = "block";
+}
+
+function clearError() {
+    fileError.textContent = "";
+    fileError.style.display = "none";
+}
+
+function syncInputFiles() {
+    const dt = new DataTransfer();
+    selectedFiles.forEach(file => dt.items.add(file));
+    attachmentInput.files = dt.files;
+}
+
+function renderFiles() {
+    fileList.innerHTML = "";
+    clearError();
+
+    const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+
+    fileCount.textContent = `${selectedFiles.length} file${selectedFiles.length === 1 ? "" : "s"} selected`;
+    fileTotalSize.textContent = `Total size: ${formatBytes(totalSize)} / 20 MB`;
+
+    selectedFiles.forEach((file, index) => {
+        const item = document.createElement("div");
+        item.className = "file-item";
+
+        item.innerHTML = `
+            <div class="file-meta">
+                <span>📄</span>
+                <span class="file-name">${file.name}</span>
+            </div>
+            <div class="file-right">
+                <div class="file-size">${formatBytes(file.size)}</div>
+                <button type="button" class="remove-file-btn" data-index="${index}" aria-label="Remove file">×</button>
+            </div>
+        `;
+
+        fileList.appendChild(item);
+    });
+
+    document.querySelectorAll(".remove-file-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            const index = Number(this.dataset.index);
+            removeFile(index);
+        });
+    });
+}
+
+function removeFile(index) {
+    selectedFiles.splice(index, 1);
+    syncInputFiles();
+    renderFiles();
+}
+
+function handleFileSelection() {
+    clearError();
+
+    const newFiles = Array.from(attachmentInput.files);
+    if (!newFiles.length) return;
+
+    let updatedFiles = [...selectedFiles];
+
+    for (const newFile of newFiles) {
+        const exists = updatedFiles.some(
+            f => f.name === newFile.name && f.size === newFile.size
+        );
+
+        if (!exists) {
+            updatedFiles.push(newFile);
+        }
+    }
+
+    if (updatedFiles.length > MAX_FILES) {
+        showError(`You can upload up to ${MAX_FILES} files only.`);
+        attachmentInput.value = "";
+        return;
+    }
+
+    const totalSize = updatedFiles.reduce((sum, file) => sum + file.size, 0);
+
+    if (totalSize > MAX_TOTAL_SIZE) {
+        showError("Total attachment size cannot exceed 20MB.");
+        attachmentInput.value = "";
+        return;
+    }
+
+    selectedFiles = updatedFiles;
+    syncInputFiles();
+    renderFiles();
+
+    attachmentInput.value = "";
+}
+
+attachmentInput.addEventListener("change", handleFileSelection);
+
+payrollForm.addEventListener("submit", function (e) {
+    const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+
+    if (selectedFiles.length > MAX_FILES) {
+        showError(`You can upload up to ${MAX_FILES} files only.`);
+        e.preventDefault();
+        return;
+    }
+
+    if (totalSize > MAX_TOTAL_SIZE) {
+        showError("Total attachment size cannot exceed 20MB.");
+        e.preventDefault();
+        return;
+    }
+
+    syncInputFiles();
+});
+</script>
+</body>
+</html>
