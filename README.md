@@ -50,6 +50,7 @@ flowchart TD
 - Azure App Service (deployment)
 - GitHub Actions (CI/CD)
 
+```
 ## Project Structure
 payroll-query-system/
 ├── app.py              Flask app + Graph API email logic
@@ -58,6 +59,7 @@ payroll-query-system/
 ├── requirements.txt
 ├── startup.txt
 └── .github/workflows/  Azure App Service deployment
+```
 
 ## Environment Variables
 
