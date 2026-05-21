@@ -21,6 +21,9 @@ flowchart TD
     class G blue
     class E green
 ```
+## Preview
+
+![Payroll Query Form](Payroll%20Query%20Form.png)
 
 ## What the form collects
 
