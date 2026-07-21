@@ -9,7 +9,7 @@ flowchart TD
     W[Worker fills out form] --> F[Flask app - app.py]
     F --> V[Validate fields + attachments]
     V --> G[Microsoft Graph API]
-    G --> E[Email sent to accounts team\naccounts@marlugroupwa.com.au]
+    G --> E[Email sent to accounts team\naccounts@company.com.au]
 
     classDef blue fill:#dbeafe,stroke:#2563eb,color:#1e40af
     classDef green fill:#d1fae5,stroke:#059669,color:#064e3b
